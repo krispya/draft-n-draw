@@ -1,0 +1,32 @@
+{
+  "name": "@draft-n-draw/react",
+  "version": "0.1.0",
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint *.ts*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/three": "^0.146.0",
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.5.2",
+    "@react-three/fiber": "^8.9.1",
+    "react": "^18.2.0",
+    "react-dom": "18.2.0",
+    "three": "^0.147.0"
+  },
+  "peerDependencies": {
+    "@react-three/fiber": "^8.9.1",
+    "react": "^18.2.0",
+    "react-dom": "18.2.0",
+    "three": "^0.147.0"
+  },
+  "dependencies": {
+    "@draft-n-draw/vanilla": "workspace:*"
+  }
+}
