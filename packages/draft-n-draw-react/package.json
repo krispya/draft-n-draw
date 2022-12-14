@@ -1,6 +1,6 @@
 {
   "name": "@draft-n-draw/react",
-  "version": "0.1.1",
+  "version": "0.3.0",
   "main": "./src/index.tsx",
   "types": "./src/index.tsx",
   "license": "MIT",

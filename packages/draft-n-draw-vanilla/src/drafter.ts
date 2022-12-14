@@ -24,17 +24,18 @@ type Helper = THREE.Object3D & {
 type HelperState = {
   object: DrawObject;
   isActive: boolean;
+  isPersistant: boolean;
 };
 
 type DrawObjectState = {
-  isActive: boolean;
   helper: Helper;
-  persist: boolean;
+  isActive: boolean;
+  isPersistant: boolean;
 };
 
-type DrawOptions = {
+type DrawOptions = DrawMaterialOptions & {
   persist?: boolean;
-} & DrawMaterialOptions;
+};
 
 type TriangleDrawOptions = TriangleDebugOptions & {
   persist?: boolean;
@@ -86,15 +87,16 @@ function createDraw<T extends DrawObject, K extends DrawOptions = DrawOptions>(
       // If all else fails, we assume it is a new debug call that we have to create helpers for.
       const helper = constructor ? new constructor(object, options) : object;
       helper.userData = { isDebug: true };
+      const isPersistant = options?.persist ?? false;
 
       drafter.group.add(helper);
       drafter.debugKeys.push(helper);
       drafter.debugMap.set(object, {
         isActive: true,
         helper,
-        persist: options?.persist ?? false,
+        isPersistant,
       });
-      drafter.helperMap.set(helper, { isActive: true, object });
+      drafter.helperMap.set(helper, { isActive: true, object, isPersistant });
     };
 
     // Defer searching the pool/creating our debug objects for the next phase.
@@ -103,8 +105,8 @@ function createDraw<T extends DrawObject, K extends DrawOptions = DrawOptions>(
 }
 
 export class Drafter {
-  private _debugKeys: Helper[];
-  private _debugMap: WeakMap<DrawObject, DrawObjectState>;
+  private _objectMap: WeakMap<DrawObject, DrawObjectState>;
+  private _helperKeys: Helper[];
   private _helperMap: WeakMap<Helper, HelperState>;
   private _poolKeys: Helper[];
   private _deferred: (() => void)[];
@@ -113,8 +115,8 @@ export class Drafter {
 
   constructor(scene: THREE.Scene) {
     this._scene = scene;
-    this._debugKeys = [];
-    this._debugMap = new WeakMap();
+    this._objectMap = new WeakMap();
+    this._helperKeys = [];
     this._helperMap = new WeakMap();
     this._poolKeys = [];
     this._deferred = [];
@@ -125,11 +127,11 @@ export class Drafter {
   }
 
   get debugKeys() {
-    return this._debugKeys;
+    return this._helperKeys;
   }
 
   get debugMap() {
-    return this._debugMap;
+    return this._objectMap;
   }
 
   get helperMap() {
@@ -173,19 +175,19 @@ export class Drafter {
 
     this._deferred.length = 0;
 
-    this._debugKeys.forEach((helper, index) => {
+    this._helperKeys.forEach((helper, index) => {
       const state = this._helperMap.get(helper);
       if (!state) return;
 
-      // No lifecycle if we are persisting.
-      // if (state.persist) return;
+      // If the helper is persisting, just ignore the life cycle.
+      if (state.isPersistant) return;
 
       if (!state.isActive) {
         this.group.remove(helper);
         helper.dispose();
         this._helperMap.delete(helper);
-        this._debugMap.delete(state.object);
-        this._debugKeys.splice(index, 1);
+        this._objectMap.delete(state.object);
+        this._helperKeys.splice(index, 1);
 
         removeObjectFromPool(this, helper);
 
@@ -195,6 +197,23 @@ export class Drafter {
       this._poolKeys.push(helper);
       state.isActive = false;
     });
+  }
+
+  dispose(object: DrawObject) {
+    const state = this.debugMap.get(object);
+    if (!state) return;
+
+    const helper = state.helper;
+
+    this.group.remove(helper);
+    helper.dispose();
+    this._helperMap.delete(helper);
+    this._objectMap.delete(object);
+
+    const index = this._helperKeys.indexOf(helper);
+    this._helperKeys.splice(index, 1);
+
+    removeObjectFromPool(this, helper);
   }
 
   draw = createDraw<THREE.Object3D>(this);

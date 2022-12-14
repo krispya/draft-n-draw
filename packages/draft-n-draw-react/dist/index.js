@@ -27,7 +27,6 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var src_exports = {};
 __export(src_exports, {
   Drafter: () => Drafter,
-  DrafterContext: () => DrafterContext,
   getDrafter: () => getDrafter,
   useDrafter: () => useDrafter
 });
@@ -56,7 +55,6 @@ function useDrafter() {
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   Drafter,
-  DrafterContext,
   getDrafter,
   useDrafter
 });

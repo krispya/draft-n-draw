@@ -76,21 +76,22 @@ type Helper = THREE.Object3D & {
 type HelperState = {
     object: DrawObject;
     isActive: boolean;
+    isPersistant: boolean;
 };
 type DrawObjectState = {
-    isActive: boolean;
     helper: Helper;
-    persist: boolean;
+    isActive: boolean;
+    isPersistant: boolean;
 };
-type DrawOptions = {
+type DrawOptions = DrawMaterialOptions & {
     persist?: boolean;
-} & DrawMaterialOptions;
+};
 type TriangleDrawOptions = TriangleDebugOptions & {
     persist?: boolean;
 };
 declare class Drafter {
-    private _debugKeys;
-    private _debugMap;
+    private _objectMap;
+    private _helperKeys;
     private _helperMap;
     private _poolKeys;
     private _deferred;
@@ -106,6 +107,7 @@ declare class Drafter {
     get scene(): THREE.Scene;
     set scene(scene: THREE.Scene);
     update(): void;
+    dispose(object: DrawObject): void;
     draw: (object: THREE.Object3D<THREE.Event>, options?: DrawOptions | undefined) => void;
     drawBox3: (object: THREE.Box3, options?: DrawOptions | undefined) => void;
     drawRay: (object: RayInfo, options?: DrawOptions | undefined) => void;
@@ -141,4 +143,4 @@ declare class PointHelper extends THREE.Mesh {
     dispose(): void;
 }
 
-export { Drafter, DrawMaterialOptions, ExtendedBox3Helper, PointHelper, RayHelper, RayInfo, SphereHelper, SphereInterface, TriangleDebugOptions, TriangleHelper, WireSphereHelper, WireTriangleHelper };
+export { Drafter, ExtendedBox3Helper, PointHelper, RayHelper, RayInfo, SphereHelper, SphereInterface, TriangleDebugOptions, TriangleHelper, WireSphereHelper, WireTriangleHelper };

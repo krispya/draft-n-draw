@@ -440,14 +440,15 @@ function createDraw(drafter, constructor) {
       }
       const helper = constructor ? new constructor(object, options) : object;
       helper.userData = { isDebug: true };
+      const isPersistant = (_a = options == null ? void 0 : options.persist) != null ? _a : false;
       drafter.group.add(helper);
       drafter.debugKeys.push(helper);
       drafter.debugMap.set(object, {
         isActive: true,
         helper,
-        persist: (_a = options == null ? void 0 : options.persist) != null ? _a : false
+        isPersistant
       });
-      drafter.helperMap.set(helper, { isActive: true, object });
+      drafter.helperMap.set(helper, { isActive: true, object, isPersistant });
     };
     drafter.deferred.push(poolOrCreate);
   };
@@ -467,8 +468,8 @@ var Drafter = class {
     this.drawDirectionalLight = createDraw(this, THREE6.DirectionalLightHelper);
     this.drawHemisphereLight = createDraw(this, THREE6.HemisphereLightHelper);
     this._scene = scene;
-    this._debugKeys = [];
-    this._debugMap = /* @__PURE__ */ new WeakMap();
+    this._objectMap = /* @__PURE__ */ new WeakMap();
+    this._helperKeys = [];
     this._helperMap = /* @__PURE__ */ new WeakMap();
     this._poolKeys = [];
     this._deferred = [];
@@ -477,10 +478,10 @@ var Drafter = class {
     scene.add(this._group);
   }
   get debugKeys() {
-    return this._debugKeys;
+    return this._helperKeys;
   }
   get debugMap() {
-    return this._debugMap;
+    return this._objectMap;
   }
   get helperMap() {
     return this._helperMap;
@@ -510,22 +511,37 @@ var Drafter = class {
       fn();
     });
     this._deferred.length = 0;
-    this._debugKeys.forEach((helper, index) => {
+    this._helperKeys.forEach((helper, index) => {
       const state = this._helperMap.get(helper);
       if (!state)
+        return;
+      if (state.isPersistant)
         return;
       if (!state.isActive) {
         this.group.remove(helper);
         helper.dispose();
         this._helperMap.delete(helper);
-        this._debugMap.delete(state.object);
-        this._debugKeys.splice(index, 1);
+        this._objectMap.delete(state.object);
+        this._helperKeys.splice(index, 1);
         removeObjectFromPool(this, helper);
         return;
       }
       this._poolKeys.push(helper);
       state.isActive = false;
     });
+  }
+  dispose(object) {
+    const state = this.debugMap.get(object);
+    if (!state)
+      return;
+    const helper = state.helper;
+    this.group.remove(helper);
+    helper.dispose();
+    this._helperMap.delete(helper);
+    this._objectMap.delete(object);
+    const index = this._helperKeys.indexOf(helper);
+    this._helperKeys.splice(index, 1);
+    removeObjectFromPool(this, helper);
   }
 };
 // Annotate the CommonJS export names for ESM import in node:
