@@ -1,10 +1,11 @@
-import { Drafter as Drafter$1 } from '@draft-n-draw/vanilla';
+import { Drafter } from '@draft-n-draw/vanilla';
+export * from '@draft-n-draw/vanilla';
 import React from 'react';
 
-declare const getDrafter: () => Drafter$1;
-declare function Drafter({ children }: {
+declare const getDrafter: () => Drafter;
+declare function DrafterProvider({ children }: {
     children: React.ReactNode;
 }): JSX.Element;
-declare function useDrafter(): Drafter$1;
+declare function useDrafter(): Drafter;
 
-export { Drafter, getDrafter, useDrafter };
+export { DrafterProvider, getDrafter, useDrafter };

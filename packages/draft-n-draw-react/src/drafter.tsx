@@ -6,9 +6,9 @@ import * as THREE from 'three';
 const drafter = new DrafterCore(new THREE.Scene());
 export const getDrafter = () => drafter;
 
-export const DrafterContext = createContext<DrafterCore>(drafter);
+const DrafterContext = createContext<DrafterCore>(drafter);
 
-export function Drafter({ children }: { children: React.ReactNode }) {
+export function DrafterProvider({ children }: { children: React.ReactNode }) {
   const scene = useThree((state) => state.scene);
   drafter.scene = scene;
 

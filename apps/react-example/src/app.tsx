@@ -1,4 +1,4 @@
-import { Drafter, useDrafter } from '@draft-n-draw/react';
+import { DrafterProvider as Drafter, useDrafter } from 'draft-n-draw';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense, useEffect, useRef } from 'react';

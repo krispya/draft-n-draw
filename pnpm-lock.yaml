@@ -16,13 +16,13 @@ importers:
 
   apps/react-example:
     specifiers:
-      '@draft-n-draw/react': workspace:*
       '@react-three/drei': ^9.46.4
       '@react-three/fiber': ^8.9.1
       '@types/react': ^18.0.26
       '@types/react-dom': ^18.0.9
       '@types/three': ^0.146.0
       '@vitejs/plugin-react-swc': ^3.0.0
+      draft-n-draw: workspace:^0.3.0
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
       react: ^18.2.0
@@ -31,9 +31,9 @@ importers:
       typescript: ^4.9.3
       vite: ^4.0.0
     dependencies:
-      '@draft-n-draw/react': link:../../packages/draft-n-draw-react
       '@react-three/drei': 9.46.4_xa6xk36nauwxkzngvitxgjpnr4
       '@react-three/fiber': 8.9.1_pvdsq7s4d5knbxbfttptgjiz3a
+      draft-n-draw: link:../../packages/draft-n-draw
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       three: 0.147.0
@@ -46,6 +46,39 @@ importers:
       eslint-config-custom: link:../../packages/eslint-config-custom
       typescript: 4.9.4
       vite: 4.0.0
+
+  packages/draft-n-draw:
+    specifiers:
+      '@draft-n-draw/react': workspace:*
+      '@draft-n-draw/vanilla': workspace:*
+      '@react-three/fiber': ^8.9.1
+      '@types/react': ^18.0.17
+      '@types/react-dom': ^18.0.6
+      '@types/three': ^0.146.0
+      eslint: ^7.32.0
+      eslint-config-custom: workspace:*
+      react: ^18.2.0
+      react-dom: 18.2.0
+      three: ^0.147.0
+      tsconfig: workspace:*
+      tsup: ^6.5.0
+      typescript: ^4.5.2
+    dependencies:
+      '@draft-n-draw/react': link:../draft-n-draw-react
+      '@draft-n-draw/vanilla': link:../draft-n-draw-vanilla
+    devDependencies:
+      '@react-three/fiber': 8.9.1_pvdsq7s4d5knbxbfttptgjiz3a
+      '@types/react': 18.0.26
+      '@types/react-dom': 18.0.9
+      '@types/three': 0.146.0
+      eslint: 7.32.0
+      eslint-config-custom: link:../eslint-config-custom
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      three: 0.147.0
+      tsconfig: link:../tsconfig
+      tsup: 6.5.0_typescript@4.9.4
+      typescript: 4.9.4
 
   packages/draft-n-draw-react:
     specifiers:

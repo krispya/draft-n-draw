@@ -17,6 +17,7 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
@@ -26,7 +27,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.tsx
 var src_exports = {};
 __export(src_exports, {
-  Drafter: () => Drafter,
+  DrafterProvider: () => DrafterProvider,
   getDrafter: () => getDrafter,
   useDrafter: () => useDrafter
 });
@@ -41,7 +42,7 @@ var import_jsx_runtime = require("react/jsx-runtime");
 var drafter = new import_vanilla.Drafter(new THREE.Scene());
 var getDrafter = () => drafter;
 var DrafterContext = (0, import_react.createContext)(drafter);
-function Drafter({ children }) {
+function DrafterProvider({ children }) {
   const scene = (0, import_fiber.useThree)((state) => state.scene);
   drafter.scene = scene;
   (0, import_fiber.useFrame)(() => {
@@ -52,9 +53,12 @@ function Drafter({ children }) {
 function useDrafter() {
   return (0, import_react.useContext)(DrafterContext);
 }
+
+// src/index.tsx
+__reExport(src_exports, require("@draft-n-draw/vanilla"), module.exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  Drafter,
+  DrafterProvider,
   getDrafter,
   useDrafter
 });

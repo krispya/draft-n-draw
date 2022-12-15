@@ -1,5 +1,11 @@
 # @draft-n-draw/react
 
+## 0.3.1
+
+### Patch Changes
+
+- Now exports vanilla modules. Drafter renamed to DrafterProvider.
+
 ## 0.3.0
 
 ### Minor Changes

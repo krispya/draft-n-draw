@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@draft-n-draw/react": "workspace:*",
     "@react-three/drei": "^9.46.4",
     "@react-three/fiber": "^8.9.1",
+    "draft-n-draw": "workspace:^0.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.147.0"
